@@ -127,4 +127,67 @@ While indoors, make sure **not** to transmit any signals with the antenna. Only 
 
 When connecting any SMA cable, make sure to hold the cable and connection point still while you connect it so that the cable **does not spin** as you tighten the nut, as this can cause damage to the pin. Tighten the nut using the SMA torque wrench (the wrench will bend when the proper tightness is reached). 
 
-## 
+## Spectrum Analyzer:
+To test the program with the spectrum analyzer, you will need the following equipment: 
+* b205mini SDR 
+* USB 3.0 Micro B cable (connecting SDR to Pi) 
+* Raspberry Pi 5 
+* Raspberry Pi 5 Power Supply (USB C) 
+* Ethernet cable (connecting Pi to Laptop) 
+* Ethernet to USB C adapter (if your laptop doesn't have ethernet) 
+* 30 dB inline attenuator 
+* 2 SMA male-male cables 
+* SMA female-female adapter (or replace one of the male-male cables with a male-female cable) 
+* SMA torque wrench 
+* SMA female to N-Type male adapter (probably plugged into the spectrum analyzer RF Input port already) 
+* Spectrum Analyzer (Rigol DSA832-TG) 
+* 50 Ohm Load (Found in the Calibration Kit F604MS) 
+
+**Process**
+1. Ensure the blue ESD mat is properly grounded, and there are no food or drinks nearby. 
+1. Carefully take the 50 Ohm Load out of the calibration kit box. Be very careful while handling this piece of equipment.  
+1. Connect the 50 Ohm Load to the “RX2” port on the SDR, ensuring that the load does not spin while the nut is being tightened. Tighten it using the torque wrench. 
+1. Connect one SMA cable to the “TX/RX” port on the SDR. (Skip next step if male to female SMA cable is used, attach female side directly to the attenuator) 
+1. Connect this cable to the SMA female-female adapter. 
+1. Connect the SMA female-female adapter to the “IN” port on the 30 dB attenuator. 
+1. Connect the other SMA cable to the “OUT” port on the 30 dB attenuator.  
+1. Connect this SMA cable to the SMA female to N-Type male adapter. 
+1. Connect the SMA female to N-Type adapter to the “RF Input” port on the spectrum analyzer if it is not already connected. Take special care that the adapter does not spin while connecting it to this port. 
+1. Turn on the spectrum analyzer.
+1. Press “FREQ” then enter your chirps center frequency and hit “MHz” to set it. 
+1. Press “SPAN” then enter a bandwidth that allows you to see your full chirp in detail. 
+1. To see the max power transmitted, select “Trace/P/F” then “Trace Type” then “Max Hold”. 
+1. Follow the steps in the sections above to connect your laptop to the Pi and get all the code ready to run on the Pi. 
+1. Plug the USB 3.0 Micro B cable into one of the blue USB ports on the Pi and plug the other end into the SDR. 
+1. Follow the Running the Code section below on how to run the program. 
+1. When the code is running, you should see the transmissions appear on the spectrum analyzer. To see the peak transmitted power, press “Peak”. Ensure that this value is less than the SDR’s max input power before doing any loopback or outdoor testing. 
+1. Since the SDR is not receiving any samples, you will see receiver errors printed to uhd_stdout.log, and rx_samps.bin will be empty.
+
+## Loopback Configuration: 
+
+To get any actual data from the SDR, we must both transmit and receive signals by connecting the SDR to itself in a loopback configuration. 
+
+**Before running the program in this configuration, make sure that you have tested your current code and config settings with the spectrum analyzer method above, and that the peak power is less than the SDR’s max input power (-15 dBm)!** 
+
+**When connecting the b205mini to itself, you should always use a 30 dBm attenuator!**
+
+1. Follow the steps in the Spectrum Analyzer section above to set up the hardware and test it with the spectrum analyzer. Confirm that the program works and the peak power is less than -15dBm. 
+1. Stop all transmissions, and do not transmit again until everything has been reconnected. You can unplug the SDR from the Pi to ensure this cannot happen. 
+1. Disconnect the SMA cable from the adapter on the spectrum analyzer. 
+1. Carefully disconnect the 50 Ohm Load and place it back in the box. 
+1. Connect the SMA cable to the “RX2” port on the SDR. 
+1. Plug the SDR back into the Pi if you disconnected it previously. 
+1. Follow the Running the Code section below to run the program.
+
+# Running the Code: 
+Now that you’re connected to the Pi and have hardware set up, you can run the code with the following commands: 
+
+1. `cd uhd_radar/` 
+1. `conda activate uhd`
+1. Check your config settings are set correctly with `nano config/<your-file>.yaml` 
+1. With the b205mini make sure the following values in the RF0 (not RF1) section are set: tx_gain should not exceed ~80 dB (max possible is 89.8 dB), rx_gain should not exceed 76 dB, tx_ant should be set to “TX/RX”, rx_ant should be set to “RX2” and transmit should be set to true. 
+1. run `make hardware-test` 
+1. run `python run.py config/<your-file>.yaml` 
+1. If you have num_pulses set to -1, then you must stop the program with Ctrl+C. 
+1. To view the output data, transfer it to a laptop (see above), ensure the PLOT section has been copied to the config file (it can be found in any of our previous outdoor tests, or the synthetic-config.yaml) and update the parameters in that section. 
+1. Plot the output with `python postprocessing/plot_samples.py data/<timestamp>_config.yaml` 
