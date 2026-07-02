@@ -340,7 +340,7 @@ int UHD_SAFE_MAIN(int argc, char *argv[]) {
   boost::asio::io_service ioservice;
 
   if (save_loc[0] != '/') {
-    save_loc = "../../" + save_loc;
+    save_loc = "" + save_loc;
   }
   if (gps_save_loc[0] != '/') {
     gps_save_loc = "../../" + gps_save_loc;
