@@ -296,8 +296,8 @@ int UHD_SAFE_MAIN(int argc, char *argv[]) {
   chirp.setMaxChirpsPerFile(files["max_chirps_per_file"].as<int>());
 
   //Merge save_loc and gps_save_loc with output_dir
-  save_loc = (std::filesystem::path(output_dir) / save_loc).string();
-  gps_save_loc = (std::filesystem::path(output_dir) / gps_save_loc).string();
+  save_loc = (boost::filesystem::path(output_dir) / save_loc).string();
+  gps_save_loc = (boost::filesystem::path(output_dir) / gps_save_loc).string();
 
 
   // Calculated parameters
