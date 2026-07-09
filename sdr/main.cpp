@@ -382,31 +382,6 @@ int UHD_SAFE_MAIN(int argc, char *argv[]) {
 
   // Note: This print statement is used by automated post-processing code. Please be careful about changing the format.
   cout << "[OPEN FILE] " << current_filename << endl;
-  // this is all me tryna test that its going to the right place which it is but its probably 
-  //because rx-samps isnt a real thing?????
-  /*cout << "cd is " << std::filesystem::current_path() << endl;
-  std::filesystem::path currentcd = std::filesystem::current_path();
-  std::filesystem::path parentcd = currentcd / "..";
-  std::filesystem::path up = std::filesystem::canonical(parentcd);
-  cout << "parcentcd is " << parentcd << endl;
-  cout << "abs parent is" << up << endl;
-  std::filesystem::path up2 = up / "..";
-  std::filesystem::path up2nice = std::filesystem::canonical(up2);
-  cout << "next is " << up2 << endl;
-  cout << "it is" << up2nice << endl;
-  std::filesystem::path down = up2nice / "data";
-  std::filesystem::path downnice = std::filesystem::canonical(down);
-  cout << "next is " << down << endl;
-  cout << "it is" << downnice << endl;
-  if (std::filesystem::exists(downnice) && std::filesystem::is_directory(downnice)) {
-            // Loop through each item in the directory
-            for (const auto& entry : std::filesystem::directory_iterator(downnice)) {
-                // Print the filename or full path
-                cout << entry.path().filename() << "\n";
-            }
-          }
-
-  cout << "ok now open" << endl;*/
   outfile.open(current_filename, ofstream::binary);
 
   /*** RX LOOP AND SUM ***/
