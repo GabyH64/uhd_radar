@@ -41,7 +41,6 @@ with open(args.yaml_file) as stream:
 
    
 print("--- Loaded constants from config.yaml ---")
-
 # Read and plot RX/TX
 rx_sig = pr.extractSig(rx_samps)
 print("--- Plotting real samples read from %s ---" % rx_samps)
@@ -53,9 +52,6 @@ pr.plotChirpVsTime(tx_sig, 'Transmitted Chirp', sample_rate)
 
 # Correlate the two chirps to determine time difference
 print("--- Match filtering received chirp with transmitted chirp ---")
-print("First is rx array size, second is tx array size")
-print(rx_sig.shape)
-print(tx_sig.shape)
 xcorr_sig = sp.correlate(rx_sig, tx_sig, mode='valid', method='auto')
 # as finddirectpath is written right now, it must be called before taking log of the signal
 # because if not, negative log values could have a greater absolute value than positive log values.
