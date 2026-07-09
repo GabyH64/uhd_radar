@@ -17,8 +17,8 @@ parser.add_argument("yaml_file", nargs='?', default='config/default.yaml',
 
 args = parser.parse_args()
 
-strArg = str(args.yaml_file)
-timestamp = strArg[5:20]
+str_Arg = str(args.yaml_file)
+timestamp = str_Arg[5:20]
 
 
 # Initialize Constants
