@@ -180,8 +180,8 @@ void wrapUp(boost::asio::posix::stream_descriptor& gps_stream, ofstream& outfile
   cout << "[RX] transmit_thread.join_all() complete." << endl << endl;
 }
 
-// TODO: This needs to be commented out otherwise the spec analyzer test won't work so it
-//needs to be edited
+// TODO: This needs to be commented out otherwise the chirp to the spec analyzer won't transmit 
+// because it can't find the data/rx_samps.bin
  // Send raw UBX message over Boost Asio serial port
 /**
  * @brief Sends message to GPS module over serial port
