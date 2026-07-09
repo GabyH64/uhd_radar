@@ -180,7 +180,8 @@ void wrapUp(boost::asio::posix::stream_descriptor& gps_stream, ofstream& outfile
   cout << "[RX] transmit_thread.join_all() complete." << endl << endl;
 }
 
-// was deleted
+// TODO: This needs to be commented out otherwise the spec analyzer test won't work so it
+//needs to be edited
  // Send raw UBX message over Boost Asio serial port
 /**
  * @brief Sends message to GPS module over serial port
@@ -381,6 +382,31 @@ int UHD_SAFE_MAIN(int argc, char *argv[]) {
 
   // Note: This print statement is used by automated post-processing code. Please be careful about changing the format.
   cout << "[OPEN FILE] " << current_filename << endl;
+  // this is all me tryna test that its going to the right place which it is but its probably 
+  //because rx-samps isnt a real thing?????
+  /*cout << "cd is " << std::filesystem::current_path() << endl;
+  std::filesystem::path currentcd = std::filesystem::current_path();
+  std::filesystem::path parentcd = currentcd / "..";
+  std::filesystem::path up = std::filesystem::canonical(parentcd);
+  cout << "parcentcd is " << parentcd << endl;
+  cout << "abs parent is" << up << endl;
+  std::filesystem::path up2 = up / "..";
+  std::filesystem::path up2nice = std::filesystem::canonical(up2);
+  cout << "next is " << up2 << endl;
+  cout << "it is" << up2nice << endl;
+  std::filesystem::path down = up2nice / "data";
+  std::filesystem::path downnice = std::filesystem::canonical(down);
+  cout << "next is " << down << endl;
+  cout << "it is" << downnice << endl;
+  if (std::filesystem::exists(downnice) && std::filesystem::is_directory(downnice)) {
+            // Loop through each item in the directory
+            for (const auto& entry : std::filesystem::directory_iterator(downnice)) {
+                // Print the filename or full path
+                cout << entry.path().filename() << "\n";
+            }
+          }
+
+  cout << "ok now open" << endl;*/
   outfile.open(current_filename, ofstream::binary);
 
   /*** RX LOOP AND SUM ***/
@@ -413,32 +439,35 @@ int UHD_SAFE_MAIN(int argc, char *argv[]) {
 
   float inversion_phase; // Store phase to use for phase inversion of this chirp
 
-  //gone because it breaks it
+  //section 1 start because it breaks it IDK WHY IT BREAKS IT. it makes it so it cant find /data/rx_samps.bin
+  //and idk how because sjkdfkjsdflkjfslkj
   
-  /* /Creating GPS log & vars
-  printf("Starting GPS code...\n");
-  using namespace boost::asio;
+  //Creating GPS log & vars
+  // printf("Starting GPS code...\n");
+  // using namespace boost::asio;
 
-  io_service io;
-  serial_port serial(io);
+  // io_service io;
+  // serial_port serial(io);
 
-  printf("Opening serial port...\n");
-  serial.open("/dev/ttyACM0");  // Adjust if needed for your system
-  printf("Serial port opened.\n");
-  serial.set_option(serial_port_base::baud_rate(115200));
-  serial.set_option(serial_port_base::character_size(8));
-  serial.set_option(serial_port_base::parity(serial_port_base::parity::none));
-  serial.set_option(serial_port_base::stop_bits(serial_port_base::stop_bits::one));
-  serial.set_option(serial_port_base::flow_control(serial_port_base::flow_control::none));
+  // printf("Opening serial port...\n");
+  // serial.open("/dev/ttyACM0");  // Adjust if needed for your system
+  // printf("Serial port opened.\n");
+  // serial.set_option(serial_port_base::baud_rate(115200));
+  // serial.set_option(serial_port_base::character_size(8));
+  // serial.set_option(serial_port_base::parity(serial_port_base::parity::none));
+  // serial.set_option(serial_port_base::stop_bits(serial_port_base::stop_bits::one));
+  // serial.set_option(serial_port_base::flow_control(serial_port_base::flow_control::none));
 
-  // Send UBX commands to configure GPS
-  configureRate(serial, 3);              // 3 Hz update rate
-  configureNMEAMessages(serial, 1);      // Enable only GGA
+  // // Send UBX commands to configure GPS
+  // configureRate(serial, 3);              // 3 Hz update rate
+  // configureNMEAMessages(serial, 1);      // Enable only GGA
 
-  ofstream gps_output("gps_log.txt");
+  // ofstream gps_output("gps_log.txt");
 
-  std::string line;
-  char c; */
+  // std::string line;
+  // char c; 
+
+  //section 1 end
 
   // Note: This print statement is used by automated post-processing code. Please be careful about changing the format.
   cout << "[START] Beginning main loop" << endl;
@@ -452,7 +481,8 @@ int UHD_SAFE_MAIN(int argc, char *argv[]) {
     // Check if we have a full sample_sum ready to write to file
     if (!checkForFullSampleSum(chirp, sample_sum, outfile)) {exit(1);};
 
-//poof also breaks it
+//TODO: if this code below is not commented, then the chirp won't work and go to the spec 
+// analyzer so it needs to be edited
 /*
 // Our GPS method (below commented GPS from old version)
     if (((pulses_received % 2000) == 0) && (sdr.getClkRef() == "gpsdo")) {

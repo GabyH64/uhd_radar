@@ -141,6 +141,15 @@ RUN_MANAGER: # These settings are only used by run.py -- not read by main.cpp
     save_gps: False                      # Set to true if using gps and wanting
                                          #   to save gps location data, set to
                                          #   false otherwise
+                                         
+# -------------------------- Plot Samples --------------------------- #
+PLOT:
+    rx_samps: *save_loc              # Receive data to use
+    orig_chirp: *ch_sent           # Chirp associated with receive data
+    sample_rate: *s_rate
+    sig_speed: 1.685e8                 # Speed of signal through medium [m/s]
+    direct_start: &dir_start 0    # Start search for direct path @ this sample
+    echo_start: 1                  # Start search for echo @ this # of samps. after direct path
 
 
 
